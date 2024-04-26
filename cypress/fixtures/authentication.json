@@ -1,0 +1,18 @@
+{
+    "validCredentials": {
+      "email": "subham.sahu.27.2@mountblue.tech",
+      "password": "Subham@123"
+    },
+    "invalidCredentials": {
+      "email": "invalid@example.com",
+      "password": "invalidpassword"
+    },
+    "emptyEmail": {
+      "email": "",
+      "password": "Subham@123"
+    },
+    "emptyPassword": {
+      "email": "subham.sahu.27.2@mountblue.tech",
+      "password": ""
+    }
+  }
