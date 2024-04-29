@@ -14,5 +14,9 @@
     "emptyPassword": {
       "email": "subham.sahu.27.2@mountblue.tech",
       "password": ""
+    },
+    "invalidEmail": {
+      "email": "subham.sahu.27.2@mountblue.tech",
+      "password": ""
     }
-  }
+}

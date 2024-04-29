@@ -1,6 +1,8 @@
 import LoginPage from '../pageObjects/loginPage';
+import Logout from '../pageObjects/logOut'
 
 const loginPage = new LoginPage();
+const logout = new Logout();
 
 describe('Specs for Chatwoot App - Authentication', () => {
     let fixtureData;
@@ -12,8 +14,7 @@ describe('Specs for Chatwoot App - Authentication', () => {
     });
 
     beforeEach(() => {
-        const adminUrl = fixtureData.adminUrl;
-        loginPage.visit(adminUrl);
+        cy.visit("/");
         loginPage.verifyInsideLoginPage();
     });
 
@@ -23,6 +24,7 @@ describe('Specs for Chatwoot App - Authentication', () => {
         loginPage.fillPassword(invalidCredentials.password);
         loginPage.submit();
         loginPage.verifyInsideLoginPage();
+        cy.contains('Invalid login credentials. Please try again.').should('exist');
     });
 
     it('should successfully log in with valid credentials and logout', () => {
@@ -30,7 +32,11 @@ describe('Specs for Chatwoot App - Authentication', () => {
         loginPage.fillEmail(validCredentials.email);
         loginPage.fillPassword(validCredentials.password);
         loginPage.submit();
-
+        cy.url().should('contain', 'dashboard');
+        logout.logout();
+        cy.wait(2000);
+        cy.url().should('contain', 'login');
+        loginPage.verifyInsideLoginPage();
     });
 
     it('should display error message when email field is empty', () => {

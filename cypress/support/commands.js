@@ -26,17 +26,21 @@
 /// <reference  types="Cypress" />
 /// <reference types="cypress-xpath" />
 
-// import LoginPage from '../pageObjects/loginPage';
+import LoginPage from '../e2e/pageObjects/loginPage'
 
-// const loginPage = new LoginPage();
+const loginPage = new LoginPage();
 
-// Cypress.Commands.add('login'[email, password], ()=>{
-//     cy.fixture('authentication.json').then((data) => {
-//         fixtureData = data;
-//     });
-//     cy.session([email,password])
-//     cy.visit('/');
-//     loginPage.fillEmail(validCredentials.email);
-//     loginPage.fillPassword(validCredentials.password);
-//     loginPage.submit();
-// })
+Cypress.Commands.add('login', (email, password)=>{
+    cy.session([email,password],()=>{
+        cy.visit('/');
+        cy.log(email,password)
+        loginPage.fillEmail(email);
+        loginPage.fillPassword(password);
+        loginPage.submit();
+        cy.wait(5000)
+    },
+    {
+        cacheAcrossSpecs:true
+    }
+    )    
+})

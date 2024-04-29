@@ -1,5 +1,4 @@
 const locators = {
-    siginButton: 'a[class="hidden navbar-link sm:inline-block"]',
     emailInput: '[data-testid="email_input"]',
     passwordInput: '[data-testid="password_input"]',
     submitButton: '[data-testid="submit_button"]',
@@ -7,11 +6,6 @@ const locators = {
 };
 
 class LoginPage {
-    visit(url) {
-        cy.visit(url);
-        cy.get(locators.siginButton).click()
-    }
-
     fillEmail(email) {
         cy.get(locators.emailInput).type(email);
     }
@@ -21,12 +15,11 @@ class LoginPage {
     }
 
     submit() {
-        // cy.contains(locators.submitButton).click();
         cy.contains('button', 'Login').click();
     }
 
     verifyInsideLoginPage() {
-        cy.get(locators.loginHeaderText).should('contain', 'Login to Chatwoot');
+        cy.contains('Login to Chatwoot');
         cy.url().should('contain', 'login');
     }
 }
