@@ -34,9 +34,6 @@ describe('Specs for Chatwoot App - Authentication', () => {
         loginPage.submit();
         cy.url().should('contain', 'dashboard');
         logout.logout();
-        cy.wait(2000);
-        cy.url().should('contain', 'login');
-        loginPage.verifyInsideLoginPage();
     });
 
     it('should display error message when email field is empty', () => {

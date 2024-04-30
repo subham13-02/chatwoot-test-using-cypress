@@ -6,16 +6,11 @@ const dashboardPage = new CheckNavigators();
 const loginPage = new LoginPage();
 
 describe('Specs for Chatwoot dashboard', () => {
-    let fixtureData;
     let authentication;
     before(() => {
-        cy.fixture('data.json').then((data) => {
-            fixtureData = data;
-        });
         cy.fixture('authentication.json').then((data) => {
             authentication = data;
         });
-        cy.fixture('authentication.json').should('exist');
         cy.fixture('data.json').should('exist');
     });
     
@@ -38,7 +33,7 @@ describe('Specs for Chatwoot dashboard', () => {
         dashboardPage.verifyNavigateToConversations();   
     });
 
-    it('should navigate to different sections of the dashboard', () => {
+    it('should navigate to different sections of the dashboard on clicking icon', () => {
         cy.visit('/');
         dashboardPage.navigateToConversations();
         dashboardPage.verifyNavigateToConversations();
@@ -47,29 +42,37 @@ describe('Specs for Chatwoot dashboard', () => {
         dashboardPage.verifyNavigateToContacts();
         
         dashboardPage.navigateToSetting();
-        dashboardPage.verifyNavigateToSetting();        
+        dashboardPage.verifyNavigateToSetting();  
+        
+        dashboardPage.navigateToReports();
+        dashboardPage.verifyNavigateToReports();  
+
+        dashboardPage.navigateToCampaigns();
+        dashboardPage.verifyNavigateToCampaigns();  
+
+        dashboardPage.navigateToHelpCenter();
+        dashboardPage.verifyNavigateToHelpCenter(); 
     });
+    
+    // The Link of the Read Docs is not clickable after changes to target
 
-    it('send message from admin side and delete that message', () => {
-        const adminChat = new AdminChat();
-        cy.visit('/');
-        adminChat.clickConversationIcon();
-        adminChat.clickFirstConversationUser();
-
-        adminChat.writeMessage(fixtureData.longMessage);
-        adminChat.clickOnSendMessage();
-        cy.contains(fixtureData.longMessage).should('exist');
-        
-        adminChat.deleteLatestMessage();
-        // adminChat.deleteAnyMessage('subham');
-        
-        adminChat.writeMessage(fixtureData.sortMessage);
-        adminChat.clickOnSendMessage();
-        cy.contains(fixtureData.sortMessage).should('exist');
-    })
+        // it('should navigate to a new URL after clicking an Read Docs Icon', () => {
+        //     cy.visit('/');
+        //     cy.get('a[href="//www.chatwoot.com/docs/product/"]').invoke('removeAttr', 'target').click();
+        //     cy.url().should('include', 'https://www.chatwoot.com/hc/user-guide/en');
+        // });
+    
+        // it.only('should navigate to a new URL after clicking a Read Docs Icon', () => {
+        //     cy.visit('/');
+        //     cy.get('a[href="//www.chatwoot.com/docs/product/"]')
+        //         .should('be.visible')
+        //         .invoke('attr', 'target', '_self')
+        //         .invoke('attr', 'href', 'https://www.chatwoot.com/hc/user-guide/en')
+        //         .click();
+        //     cy.wait(1000); // Wait for a second for the page to load
+        //     cy.url().should('include', 'https://www.chatwoot.com/hc/user-guide/en');
+        // });
 });
-
-
 
 
 

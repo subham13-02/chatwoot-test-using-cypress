@@ -54,8 +54,12 @@ class Campaigns {
         cy.get(locators.enableCampaignCheckbox).check();
     }
 
+    uncheckEnableCampaignCheckbox() {
+        cy.get(locators.enableCampaignCheckbox).scrollIntoView().uncheck();
+    }
+
     checkTriggerDuringBusinessHours() {
-        cy.get(locators.triggerDuringBusinessHoursCheckbox).check();
+        cy.get(locators.triggerDuringBusinessHoursCheckbox).scrollIntoView().check();
     }
 
     createFormButtons(buttonName) {
@@ -86,6 +90,14 @@ class Campaigns {
     }
     checkDeleteCampaign(unexpectedTitle){
         cy.get(locators.latestCampaign).contains(unexpectedTitle).should('not.exist')
+    }
+
+    checkEnabledCampaign(){
+        cy.get(locators.latestCampaign).contains('Enabled');
+    }
+
+    checkDisabledCampaign(){
+        cy.get(locators.latestCampaign).contains('Disabled');
     }
 }
 export default Campaigns;

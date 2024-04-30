@@ -3,6 +3,9 @@ const locators = {
     conversationsIcon: 'a[href="/app/accounts/96051/dashboard"][data-original-title="null"]',
     contactsIcon: 'a[href="/app/accounts/96051/contacts"]',
     settingIcon:'a[href="/app/accounts/96051/settings"]',
+    reportsIcon:'a[href="/app/accounts/96051/reports"]',
+    campaignsIcon:'a[href="/app/accounts/96051/campaigns"]',
+    helpCenterIcon:'a[href="/app/accounts/96051/portals"]',
 };
 
 class CheckNavigators{
@@ -36,6 +39,27 @@ class CheckNavigators{
     }
     verifyNavigateToSetting(){
         cy.contains('span', 'Account settings').should('is.visible');
+    }
+
+    navigateToReports(){
+        cy.get(locators.reportsIcon).click();
+    }
+    verifyNavigateToReports(){
+        cy.contains('span', 'Overview').should('is.visible');
+    }
+
+    navigateToCampaigns(){
+        cy.get(locators.campaignsIcon).click();
+    }
+    verifyNavigateToCampaigns(){
+        cy.contains('span', 'Ongoing campaigns').should('is.visible');
+    }
+
+    navigateToHelpCenter(){
+        cy.get(locators.helpCenterIcon).click();
+    }
+    verifyNavigateToHelpCenter(){
+        cy.contains('h1', 'Help Center').should('is.visible');
     }
 }
 

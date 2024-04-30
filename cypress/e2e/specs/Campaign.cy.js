@@ -9,7 +9,6 @@ describe('Specs for managing campaigns', () => {
         cy.fixture('authentication.json').then((data) => {
             authentication = data;
         });
-        cy.fixture('authentication.json').should('exist');
     });
     
     beforeEach(() => {
@@ -35,6 +34,24 @@ describe('Specs for managing campaigns', () => {
 
         campaigns.createFormButtons('Create');
         campaigns.checkLatestUpdatedCampaign(title);
+    });
+
+    it('create check the enable and disable campaign', ()=>{
+        cy.visit('/');
+        campaigns.clickCampaignIcon();
+        campaigns.verifyInsideCampaign();
+        
+        campaigns.clickUpdateCampaignButton();
+        campaigns.uncheckEnableCampaignCheckbox();
+        campaigns.updateFormButtons('Update');
+        campaigns.verifyInsideCampaign();
+        campaigns.checkDisabledCampaign();
+
+        campaigns.clickUpdateCampaignButton();
+        campaigns.checkEnableCampaignCheckbox();
+        campaigns.updateFormButtons('Update');
+        campaigns.verifyInsideCampaign();
+        campaigns.checkEnabledCampaign();
     });
 
     it('Should cancel creating a new campaign', () => {
@@ -75,12 +92,11 @@ describe('Specs for managing campaigns', () => {
         campaigns.updateFormButtons('Update');
         campaigns.checkLatestUpdatedCampaign(title);
 
-        campaigns.clickCampaignIcon();
+        campaigns.verifyInsideCampaign();
         campaigns.clickDeleteCampaignButton();
         campaigns.confirmDeleteCampaign();
         campaigns.checkDeleteCampaign(title);
     });
-
 });
 
 

@@ -21,5 +21,5 @@ class UserChat{
     }
 }
 
-export default ChatPage;
+export default UserChat;
 

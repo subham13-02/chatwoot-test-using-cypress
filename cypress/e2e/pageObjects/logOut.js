@@ -6,7 +6,7 @@ class Logout{
     logout(){
         cy.get(locators.profileSetting).should('is.visible');
         cy.get(locators.profileSetting).click();
-        cy.get('span').contains('Logout');
+        cy.get('span').contains('Logout').click();
     }
 }
 export default Logout;
