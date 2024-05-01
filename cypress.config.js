@@ -11,4 +11,5 @@ module.exports = defineConfig({
   },
   chromeWebSecurity: false,
   experimentalModifyObstructiveThirdPartyCode: true,
+
 });

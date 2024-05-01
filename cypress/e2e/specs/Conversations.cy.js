@@ -42,7 +42,7 @@ describe('Specs for Chatwoot dashboard', () => {
         adminChat.checkMessageExist(sortMessage);
         adminChat.deleteLatestMessage();
     });
-    it.only('test conversation assigned agent from mine to none', ()=>{
+    it('test conversation assigned agent from mine to none', ()=>{
         let currentUsername;
 
         cy.visit('/');
@@ -52,7 +52,7 @@ describe('Specs for Chatwoot dashboard', () => {
         adminChat.clickMineChatTab();
         adminChat.clickFirstConversationUser();
         
-        currentUsername = adminChat.getCurrentUserName();
+        cy.wrap(currentUsername = adminChat.getCurrentUserName());
         cy.log(currentUsername);
         adminChat.makeSureMoreDetailsIsClicked();
         adminChat.makeSureConversationActionIsClicked();       
@@ -62,21 +62,28 @@ describe('Specs for Chatwoot dashboard', () => {
         adminChat.clickUnassignedChatTab();
         adminChat.checkUserIsInsideUnassigned(currentUsername);
     })
-    it('test conversation assigned agent from mine to none', ()=>{
+    it.only('test conversation assigned agent from mine to none', ()=>{
+        let currentUsername;
         cy.visit('/');
         adminChat.clickConversationIcon();
         adminChat.clickAllChatTab();
         adminChat.checkAllConversationFetched();
         adminChat.clickMineChatTab();
         adminChat.clickFirstConversationUser();
-        currentUsername = adminChat.getCurrentUserName();
-        adminChat.makeSureMoreDetailsIsClicked();
-        adminChat.makeSureConversationActionIsClicked();       
-        adminChat.selectAssignAgentSelector();
-        adminChat.selectAssignedNone(); 
-        adminChat.clickConversationIcon();
-        adminChat.clickUnassignedChatTab();
-        adminChat.checkUserIsInsideUnassigned(currentUsername);
+        
+        adminChat.getCurrentUserName().then(username => {
+            currentUsername = username;
+
+            adminChat.makeSureMoreDetailsIsClicked();
+            adminChat.makeSureConversationActionIsClicked();       
+            adminChat.selectAssignAgentSelector();
+            adminChat.selectAssignedNone(); 
+
+            // After changing assignment, navigate to Unassigned tab and check if the user is inside
+            adminChat.clickConversationIcon();
+            adminChat.clickUnassignedChatTab();
+            adminChat.checkUserIsInsideUnassigned(currentUsername);
+        });
     })
 
     //################################### Iframe of user side Chat is not accessible. ####################################

@@ -91,14 +91,14 @@ class AdminChat {
     selectAssignedNone(){
         cy.get(conversationLocators.agentNone).contains('None').click();
     }
-    getCurrentUserName(){
+    getCurrentUserName() {
         return cy.get(conversationLocators.currentConversationUserName)
-        .should('exist')
-        .invoke('text')
-        .then(userNameText => {
-            return userNameText.trim(); 
-        });
-    }
+          .should('exist')
+          .invoke('text')
+          .then(userNameText => {
+            return userNameText.trim();
+          });
+      }
     checkAllConversationFetched(){
         cy.get(conversationLocators.allConversationLoaded).contains('All conversations loaded 🎉').should('exist');
     }
@@ -106,5 +106,4 @@ class AdminChat {
         cy.contains(expectedUsername).should('be.visible');
     }
 }
-
 export default AdminChat;
