@@ -1,12 +1,9 @@
 import AdminChat from '../pageObjects/adminChat';
-import UserChat from '../pageObjects/userChat';
-import CheckNavigators from '../pageObjects/checkNavigators';
-import LoginPage from '../pageObjects/loginPage';
 import { faker } from '@faker-js/faker';
 
-const adminChat = new AdminChat();
 describe('Specs for Chatwoot dashboard', () => {
     let authentication;
+    const adminChat = new AdminChat();
     before(() => {
         cy.fixture('authentication.json').then((data) => {
             authentication = data;
@@ -35,7 +32,6 @@ describe('Specs for Chatwoot dashboard', () => {
         adminChat.checkMessageExist(sortMessage);
         
     });
-
     it('send private message from admin side and delete that message', () => {
         const sortMessage = faker.lorem.words(2);
 
@@ -46,32 +42,44 @@ describe('Specs for Chatwoot dashboard', () => {
         adminChat.checkMessageExist(sortMessage);
         adminChat.deleteLatestMessage();
     });
-    
-    it('test conversation actions', ()=>{
+    it.only('test conversation assigned agent from mine to none', ()=>{
+        let currentUsername;
+
         cy.visit('/');
         adminChat.clickConversationIcon();
+        adminChat.clickAllChatTab();
+        adminChat.checkAllConversationFetched();
+        adminChat.clickMineChatTab();
         adminChat.clickFirstConversationUser();
-        adminChat.makeSureMoreDetailsIsClicked();
-        adminChat.makeSureConversationActionIsClicked();
-
-        adminChat.selectAssignAgentSelector();
-        adminChat.selectAssignedSelf();        
         
+        currentUsername = adminChat.getCurrentUserName();
+        cy.log(currentUsername);
+        adminChat.makeSureMoreDetailsIsClicked();
+        adminChat.makeSureConversationActionIsClicked();       
         adminChat.selectAssignAgentSelector();
         adminChat.selectAssignedNone(); 
-    })
-    it.only('check count', ()=>{
-        cy.visit('/');
-        cy.get('[role="group"]').should('is.visible');
         adminChat.clickConversationIcon();
-        adminChat.countOfMineTabs();
-        adminChat.countOfUnassignedTabs();
-        adminChat.countOfAllTabs();
+        adminChat.clickUnassignedChatTab();
+        adminChat.checkUserIsInsideUnassigned(currentUsername);
+    })
+    it('test conversation assigned agent from mine to none', ()=>{
+        cy.visit('/');
+        adminChat.clickConversationIcon();
+        adminChat.clickAllChatTab();
+        adminChat.checkAllConversationFetched();
+        adminChat.clickMineChatTab();
+        adminChat.clickFirstConversationUser();
+        currentUsername = adminChat.getCurrentUserName();
+        adminChat.makeSureMoreDetailsIsClicked();
+        adminChat.makeSureConversationActionIsClicked();       
+        adminChat.selectAssignAgentSelector();
+        adminChat.selectAssignedNone(); 
+        adminChat.clickConversationIcon();
+        adminChat.clickUnassignedChatTab();
+        adminChat.checkUserIsInsideUnassigned(currentUsername);
     })
 
-
-
-    //############## Iframe of user side Chat is not accessable. ###############
+    //################################### Iframe of user side Chat is not accessible. ####################################
 
         // it('send message from user side', () => {
         //     const userChat = new UserChat();
@@ -93,20 +101,5 @@ describe('Specs for Chatwoot dashboard', () => {
             //     .then(cy.wrap)
             // iframe.get('button:nth-child(1)').click();     
         // })
-        // it.only('gets the post', () => {cy.visit('https://subham13-02.github.io/chat-user-pages/')
-        //     const getIframeDocument = () => {
-        //         return cy.get('#chatwoot_live_chat_widget"]')
-        //             .its('0.contentDocument').should('exist')   
-        //     }
-        //     const getIframeBody = () => {
-                // get the document
-        //         return getIframeDocument()
-                // automatically retries until body is loaded
-        //         .its('body').should('not.be.undefined')
-                // chaining more Cypress commands, like ".find(...)"
-        //         .then(cy.wrap)
-        //     }
-
-        //     getIframeBody().find('button').should('have.text', 'Continue conversation').click()
-        // })
+    //#############################################################################################################################
 })

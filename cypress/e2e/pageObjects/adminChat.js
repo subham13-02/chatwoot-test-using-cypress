@@ -1,11 +1,14 @@
+import { use } from "chai";
+
 const conversationLocators = {
     conversationIcon: 'a[href="/app/accounts/96051/dashboard"][data-original-title="null"]',
     allTabs: '.tabs',
     unassignedCount:':nth-child(1) > a > .badge > span',
     mineCount:':nth-child(2) > a > .badge > span',
     allCount:':nth-child(3) > a > .badge > span',
-
+    allConversationLoaded:'[role="tfoot"]',
     firstConversationUser: 'div[role="group"] div[role="listitem"]:nth-child(1)',
+    currentConversationUserName: "span[class='text-base font-medium leading-tight text-slate-900 dark:text-slate-100']",
     chatSection: 'p[data-placeholder="Shift + enter for new line. Start with '/' to select a Canned Response."]',
     sendButton: '.right-wrap .button .button__content',
     latestMessageDots: '.conversation-panel li:last-child button[type="submit"]',
@@ -14,9 +17,8 @@ const conversationLocators = {
     privateChatSection:'[data-placeholder="Shift + enter for new line. This will be visible only to Agents"]',
     assignAgentSelector:':nth-child(1) > .relative > .border',
     agentSelf:'[data-keydown-handler-index]>li:nth-child(2)',
-    agentNone: '[data-keydown-handler-index]>li:nth-child(1)',
+    agentNone: '[data-keydown-handler-index]>li',
 };
-
 class AdminChat {
     clickConversationIcon() {
         cy.get(conversationLocators.conversationIcon).click();
@@ -87,22 +89,21 @@ class AdminChat {
         cy.get(conversationLocators.agentSelf).click();
     }
     selectAssignedNone(){
-        cy.get(conversationLocators.agentNone).click();
+        cy.get(conversationLocators.agentNone).contains('None').click();
     }
-    countOfAllTabs(){
-        cy.get(conversationLocators.allCount).invoke('text').then((numberText) => {
-            cy.log(numberText);
+    getCurrentUserName(){
+        return cy.get(conversationLocators.currentConversationUserName)
+        .should('exist')
+        .invoke('text')
+        .then(userNameText => {
+            return userNameText.trim(); 
         });
     }
-    countOfMineTabs(){
-        cy.get(conversationLocators.mineCount).invoke('text').then((numberText) => {
-            cy.log(numberText);
-        });
+    checkAllConversationFetched(){
+        cy.get(conversationLocators.allConversationLoaded).contains('All conversations loaded 🎉').should('exist');
     }
-    countOfUnassignedTabs(){
-        cy.get(conversationLocators.unassignedCount).invoke('text').then((numberText) => {
-            cy.log(numberText);
-        });
+    checkUserIsInsideUnassigned(expectedUsername){
+        cy.contains(expectedUsername).should('be.visible');
     }
 }
 

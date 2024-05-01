@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chai": "^5.1.0",
     "cypress": "^13.8.0"
   },
   "devDependencies": {

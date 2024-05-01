@@ -1,9 +1,6 @@
-import AdminChat from '../pageObjects/adminChat';
 import CheckNavigators from '../pageObjects/checkNavigators';
-import LoginPage from '../pageObjects/loginPage';
 
 const dashboardPage = new CheckNavigators();
-const loginPage = new LoginPage();
 
 describe('Specs for Chatwoot dashboard', () => {
     let authentication;
@@ -11,7 +8,6 @@ describe('Specs for Chatwoot dashboard', () => {
         cy.fixture('authentication.json').then((data) => {
             authentication = data;
         });
-        cy.fixture('data.json').should('exist');
     });
     
     beforeEach(() => {
@@ -54,7 +50,7 @@ describe('Specs for Chatwoot dashboard', () => {
         dashboardPage.verifyNavigateToHelpCenter(); 
     });
     
-    // The Link of the Read Docs is not clickable after changes to target
+    //################# The Link of the Read Docs is not clickable after changes to target. #########################
 
         // it('should navigate to a new URL after clicking an Read Docs Icon', () => {
         //     cy.visit('/');
@@ -72,7 +68,8 @@ describe('Specs for Chatwoot dashboard', () => {
         //     cy.wait(1000); // Wait for a second for the page to load
         //     cy.url().should('include', 'https://www.chatwoot.com/hc/user-guide/en');
         // });
-});
+    //#################//#################//#################//#################//#################//#################
+})
 
 
 
