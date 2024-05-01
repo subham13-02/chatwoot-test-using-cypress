@@ -1,14 +1,20 @@
 const conversationLocators = {
     conversationIcon: 'a[href="/app/accounts/96051/dashboard"][data-original-title="null"]',
     allTabs: '.tabs',
-    firstConversationUser: 'ancient-voice-810',
-    chatSection: '.ProseMirror',
+    unassignedCount:':nth-child(1) > a > .badge > span',
+    mineCount:':nth-child(2) > a > .badge > span',
+    allCount:':nth-child(3) > a > .badge > span',
+
+    firstConversationUser: 'div[role="group"] div[role="listitem"]:nth-child(1)',
+    chatSection: 'p[data-placeholder="Shift + enter for new line. Start with '/' to select a Canned Response."]',
     sendButton: '.right-wrap .button .button__content',
     latestMessageDots: '.conversation-panel li:last-child button[type="submit"]',
-    deleteCurrentMessage: "//p[normalize-space()='Delete']", //using xpath is the only way I can find to locate delete btn.
     currentMessage: '.conversation-panel li:last-child',                                      
     confirmDelete: "button[class='button action-button smooth alert'][type='submit']",
     privateChatSection:'[data-placeholder="Shift + enter for new line. This will be visible only to Agents"]',
+    assignAgentSelector:':nth-child(1) > .relative > .border',
+    agentSelf:'[data-keydown-handler-index]>li:nth-child(2)',
+    agentNone: '[data-keydown-handler-index]>li:nth-child(1)',
 };
 
 class AdminChat {
@@ -19,9 +25,15 @@ class AdminChat {
     clickAllChatTab() {
         cy.get(conversationLocators.allTabs).contains('a', 'All').click();
     }
+    clickMineChatTab() {
+        cy.get(conversationLocators.allTabs).contains('a', 'Mine').click();
+    }
+    clickUnassignedChatTab() {
+        cy.get(conversationLocators.allTabs).contains('a', 'Unassigned').click();
+    }
 
     clickFirstConversationUser() {
-        cy.contains('h4', conversationLocators.firstConversationUser).click();
+        cy.get(conversationLocators.firstConversationUser).click();
     }
     checkMessageExist(expectedMessage){
         cy.contains(expectedMessage).should('exist');
@@ -47,11 +59,51 @@ class AdminChat {
     }
 
     deleteAnyMessage(message){
+        cy.get('ul.conversation-panel').should('contain',message);
         cy.contains('ul.conversation-panel', message).find('button[type="submit"]').click();
         cy.get('p').contains('Delete').click();              
         cy.get(conversationLocators.confirmDelete).click();
     }
 
+    makeSureMoreDetailsIsClicked(){
+        cy.get('.gap-2 > .button > .button__content').then(($button) => {
+            const buttonText = $button.text().trim();
+            if (buttonText === 'More details') {
+                $button.click();
+            }
+        });    
+    }
+    makeSureConversationActionIsClicked(){
+        cy.get('body').then(($body) => {
+            if (!$body.find('.conversation-sidebar-wrap').is(':visible')) {
+                cy.get('button h5').contains('Conversation Actions').click();
+            }
+        });
+    }
+    selectAssignAgentSelector(){
+        cy.get(conversationLocators.assignAgentSelector).click();
+    }
+    selectAssignedSelf(){
+        cy.get(conversationLocators.agentSelf).click();
+    }
+    selectAssignedNone(){
+        cy.get(conversationLocators.agentNone).click();
+    }
+    countOfAllTabs(){
+        cy.get(conversationLocators.allCount).invoke('text').then((numberText) => {
+            cy.log(numberText);
+        });
+    }
+    countOfMineTabs(){
+        cy.get(conversationLocators.mineCount).invoke('text').then((numberText) => {
+            cy.log(numberText);
+        });
+    }
+    countOfUnassignedTabs(){
+        cy.get(conversationLocators.unassignedCount).invoke('text').then((numberText) => {
+            cy.log(numberText);
+        });
+    }
 }
 
 export default AdminChat;

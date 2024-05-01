@@ -4,9 +4,7 @@ import CheckNavigators from '../pageObjects/checkNavigators';
 import LoginPage from '../pageObjects/loginPage';
 import { faker } from '@faker-js/faker';
 
-const dashboardPage = new CheckNavigators();
-const loginPage = new LoginPage();
-
+const adminChat = new AdminChat();
 describe('Specs for Chatwoot dashboard', () => {
     let authentication;
     before(() => {
@@ -23,7 +21,7 @@ describe('Specs for Chatwoot dashboard', () => {
     it('send message from admin side and delete that message', () => {
         const longMessage = faker.lorem.sentences(4);
         const sortMessage = faker.lorem.words(2);
-        const adminChat = new AdminChat();
+        
         cy.visit('/');
         adminChat.clickConversationIcon();
         adminChat.clickFirstConversationUser();
@@ -34,13 +32,13 @@ describe('Specs for Chatwoot dashboard', () => {
         adminChat.deleteLatestMessage();        
         adminChat.writeMessage(sortMessage);
         adminChat.clickOnSendMessage();
-        adminChat.checkMessage(sortMessage);
+        adminChat.checkMessageExist(sortMessage);
         
     });
 
     it('send private message from admin side and delete that message', () => {
         const sortMessage = faker.lorem.words(2);
-        const adminChat = new AdminChat();
+
         cy.visit('/');
         adminChat.clickConversationIcon();
         adminChat.clickFirstConversationUser();
@@ -48,11 +46,27 @@ describe('Specs for Chatwoot dashboard', () => {
         adminChat.checkMessageExist(sortMessage);
         adminChat.deleteLatestMessage();
     });
-    it('Verify assigned agent and unassigned agest', ()=>{
-        const adminChat = new AdminChat();
+    
+    it('test conversation actions', ()=>{
         cy.visit('/');
         adminChat.clickConversationIcon();
         adminChat.clickFirstConversationUser();
+        adminChat.makeSureMoreDetailsIsClicked();
+        adminChat.makeSureConversationActionIsClicked();
+
+        adminChat.selectAssignAgentSelector();
+        adminChat.selectAssignedSelf();        
+        
+        adminChat.selectAssignAgentSelector();
+        adminChat.selectAssignedNone(); 
+    })
+    it.only('check count', ()=>{
+        cy.visit('/');
+        cy.get('[role="group"]').should('is.visible');
+        adminChat.clickConversationIcon();
+        adminChat.countOfMineTabs();
+        adminChat.countOfUnassignedTabs();
+        adminChat.countOfAllTabs();
     })
 
 
