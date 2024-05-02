@@ -9,10 +9,10 @@ const conversationLocators = {
     allConversationLoaded:'[role="tfoot"]',
     firstConversationUser: 'div[role="group"] div[role="listitem"]:nth-child(1)',
     currentConversationUserName: "span[class='text-base font-medium leading-tight text-slate-900 dark:text-slate-100']",
-    chatSection: 'p[data-placeholder="Shift + enter for new line. Start with '/' to select a Canned Response."]',
+    chatSection: '.ProseMirror',
     sendButton: '.right-wrap .button .button__content',
     latestMessageDots: '.conversation-panel li:last-child button[type="submit"]',
-    currentMessage: '.conversation-panel li:last-child',                                      
+    currentMessage: '.conversation-panel  li:nth-last-child(2)',                                      
     confirmDelete: "button[class='button action-button smooth alert'][type='submit']",
     privateChatSection:'[data-placeholder="Shift + enter for new line. This will be visible only to Agents"]',
     assignAgentSelector:':nth-child(1) > .relative > .border',
@@ -42,6 +42,7 @@ class AdminChat {
     }
 
     writeMessage(message) {
+        cy.get('button span').contains('Reply').click();
         cy.get(conversationLocators.chatSection).type(message);
     }
     writePrivateMessage(message){
@@ -86,7 +87,7 @@ class AdminChat {
         cy.get(conversationLocators.assignAgentSelector).click();
     }
     selectAssignedSelf(){
-        cy.get(conversationLocators.agentSelf).click();
+        cy.get('button span').contains('Assign to me').click();
     }
     selectAssignedNone(){
         cy.get(conversationLocators.agentNone).contains('None').click();

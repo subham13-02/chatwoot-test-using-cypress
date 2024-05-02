@@ -21,8 +21,9 @@ describe('Specs for Chatwoot dashboard', () => {
         
         cy.visit('/');
         adminChat.clickConversationIcon();
+        adminChat.clickAllChatTab();
+        adminChat.checkAllConversationFetched();
         adminChat.clickFirstConversationUser();
-
         adminChat.writeMessage(longMessage);
         adminChat.clickOnSendMessage();
         cy.contains(longMessage).should('exist');
@@ -37,32 +38,14 @@ describe('Specs for Chatwoot dashboard', () => {
 
         cy.visit('/');
         adminChat.clickConversationIcon();
+        adminChat.clickAllChatTab();
+        adminChat.checkAllConversationFetched();
         adminChat.clickFirstConversationUser();
         adminChat.writePrivateMessage(sortMessage)
         adminChat.checkMessageExist(sortMessage);
         adminChat.deleteLatestMessage();
     });
-    it('test conversation assigned agent from mine to none', ()=>{
-        let currentUsername;
-
-        cy.visit('/');
-        adminChat.clickConversationIcon();
-        adminChat.clickAllChatTab();
-        adminChat.checkAllConversationFetched();
-        adminChat.clickMineChatTab();
-        adminChat.clickFirstConversationUser();
-        
-        cy.wrap(currentUsername = adminChat.getCurrentUserName());
-        cy.log(currentUsername);
-        adminChat.makeSureMoreDetailsIsClicked();
-        adminChat.makeSureConversationActionIsClicked();       
-        adminChat.selectAssignAgentSelector();
-        adminChat.selectAssignedNone(); 
-        adminChat.clickConversationIcon();
-        adminChat.clickUnassignedChatTab();
-        adminChat.checkUserIsInsideUnassigned(currentUsername);
-    })
-    it.only('test conversation assigned agent from mine to none', ()=>{
+    it('test conversation assigned agent from mine to unassigned', ()=>{
         let currentUsername;
         cy.visit('/');
         adminChat.clickConversationIcon();
@@ -79,9 +62,29 @@ describe('Specs for Chatwoot dashboard', () => {
             adminChat.selectAssignAgentSelector();
             adminChat.selectAssignedNone(); 
 
-            // After changing assignment, navigate to Unassigned tab and check if the user is inside
             adminChat.clickConversationIcon();
             adminChat.clickUnassignedChatTab();
+            adminChat.checkUserIsInsideUnassigned(currentUsername);
+        });
+    });
+    it('test conversation assigned agent from unassigned to mine', ()=>{
+        let currentUsername;
+        cy.visit('/');
+        adminChat.clickConversationIcon();
+        adminChat.clickAllChatTab();
+        adminChat.checkAllConversationFetched();
+        adminChat.clickUnassignedChatTab();
+        adminChat.clickFirstConversationUser();
+        
+        adminChat.getCurrentUserName().then(username => {
+            currentUsername = username;
+
+            adminChat.makeSureMoreDetailsIsClicked();
+            adminChat.makeSureConversationActionIsClicked();       
+            adminChat.selectAssignedSelf(); 
+
+            adminChat.clickConversationIcon();
+            adminChat.clickMineChatTab();
             adminChat.checkUserIsInsideUnassigned(currentUsername);
         });
     })
