@@ -20,6 +20,5 @@ class UserChat{
         
     }
 }
-
 export default UserChat;
 

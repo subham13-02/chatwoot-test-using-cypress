@@ -90,7 +90,6 @@ describe('Specs for Chatwoot dashboard', () => {
     })
 
     //################################### Iframe of user side Chat is not accessible. ####################################
-
         // it('send message from user side', () => {
         //     const userChat = new UserChat();
         //     cy.visit('https://subham13-02.github.io/chat-user-pages/');
