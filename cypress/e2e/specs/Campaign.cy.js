@@ -35,7 +35,72 @@ describe('Specs for managing campaigns', () => {
         campaigns.createFormButtons('Create');
         campaigns.checkLatestUpdatedCampaign(title);
     });
+    it('Should not create a new campaign without filling title', () => {
+        const message = faker.lorem.sentences(2);
+        const url = faker.internet.url();
+        const inboxValue = '40652';
 
+        cy.visit('/');
+        campaigns.clickCampaignIcon();
+        campaigns.verifyInsideCampaign();
+        campaigns.clickCreateCampaignButton();
+        campaigns.fillMessage(message);
+        campaigns.selectInbox(inboxValue);
+        campaigns.fillURL(url);
+        campaigns.checkTriggerDuringBusinessHours();
+        campaigns.createFormButtons('Create');
+        campaigns.checkCreateButtonNotClicked();
+    });
+    it('Should not create a new campaign without filling message', () => {
+        const title = faker.lorem.words(3);
+        const url = faker.internet.url();
+        const inboxValue = '40652';
+
+        cy.visit('/');
+        campaigns.clickCampaignIcon();
+        campaigns.verifyInsideCampaign();
+        campaigns.clickCreateCampaignButton();
+        campaigns.fillTitle(title);
+        campaigns.selectInbox(inboxValue);
+        campaigns.fillURL(url);
+        campaigns.checkTriggerDuringBusinessHours();
+        campaigns.createFormButtons('Create');
+        campaigns.checkCreateButtonNotClicked();
+    });
+    it('Should not create a new campaign without filling url', () => {
+        const title = faker.lorem.words(3);
+        const message = faker.lorem.sentences(2);
+        const inboxValue = '40652';
+
+        cy.visit('/');
+        campaigns.clickCampaignIcon();
+        campaigns.verifyInsideCampaign();
+        campaigns.clickCreateCampaignButton();
+        campaigns.fillTitle(title);
+        campaigns.fillMessage(message);
+        campaigns.selectInbox(inboxValue);
+        campaigns.checkTriggerDuringBusinessHours();
+        campaigns.createFormButtons('Create');
+        campaigns.checkCreateButtonNotClicked();
+    });
+    it('Should not create a new campaign with filling invalid url format', () => {
+        const title = faker.lorem.words(3);
+        const message = faker.lorem.sentences(2);
+        const invalidUrl = faker.lorem.word(5);
+        const inboxValue = '40652';
+
+        cy.visit('/');
+        campaigns.clickCampaignIcon();
+        campaigns.verifyInsideCampaign();
+        campaigns.clickCreateCampaignButton();
+        campaigns.fillTitle(title);
+        campaigns.fillMessage(message);
+        campaigns.selectInbox(inboxValue);
+        campaigns.fillURL(invalidUrl);
+        campaigns.checkTriggerDuringBusinessHours();
+        campaigns.createFormButtons('Create');
+        campaigns.checkCreateButtonNotClicked();
+    });
     it('create check the enable and disable campaign', ()=>{
         cy.visit('/');
         campaigns.clickCampaignIcon();

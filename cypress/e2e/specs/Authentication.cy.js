@@ -49,4 +49,11 @@ describe('Specs for Chatwoot App - Authentication', () => {
         loginPage.submit();
         loginPage.verifyInsideLoginPage();
     });
+    it('should display error message when invalid email format with valid password', () => {
+        const incorrectEmailFormat = fixtureData.incorrectEmailFormat;
+        loginPage.fillEmail(incorrectEmailFormat.email);
+        loginPage.fillPassword(incorrectEmailFormat.password);
+        loginPage.submit();
+        loginPage.verifyInsideLoginPage();
+    });
 });

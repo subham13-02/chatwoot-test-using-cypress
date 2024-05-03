@@ -3,8 +3,8 @@ import { use } from "chai";
 const conversationLocators = {
     conversationIcon: 'a[href="/app/accounts/96051/dashboard"][data-original-title="null"]',
     allTabs: '.tabs',
-    unassignedCount:':nth-child(1) > a > .badge > span',
-    mineCount:':nth-child(2) > a > .badge > span',
+    unassignedCount:':nth-child(2) > a > .badge > span',
+    mineCount:':nth-child(1) > a > .badge > span',
     allCount:':nth-child(3) > a > .badge > span',
     allConversationLoaded:'[role="tfoot"]',
     firstConversationUser: 'div[role="group"] div[role="listitem"]:nth-child(1)',
@@ -18,6 +18,9 @@ const conversationLocators = {
     assignAgentSelector:':nth-child(1) > .relative > .border',
     agentSelf:'[data-keydown-handler-index]>li:nth-child(2)',
     agentNone: '[data-keydown-handler-index]>li',
+    moreDetails: '.gap-2 > .button > .button__content',
+    userDetailsSideBar: '.conversation-sidebar-wrap',
+    checKConversationActionClicked: '.conversation--actions:contains("Assigned Agent")',
 };
 class AdminChat {
     clickConversationIcon() {
@@ -72,13 +75,13 @@ class AdminChat {
         cy.get('.gap-2 > .button > .button__content').then(($button) => {
             const buttonText = $button.text().trim();
             if (buttonText === 'More details') {
-                $button.click();
+                $button.trigger('click');
             }
         });    
     }
     makeSureConversationActionIsClicked(){
-        cy.get('body').then(($body) => {
-            if (!$body.find('.conversation-sidebar-wrap').is(':visible')) {
+        cy.get(conversationLocators.userDetailsSideBar).then(($detailsSideBar) => {
+            if (!$detailsSideBar.find(conversationLocators.checKConversationActionClicked).is(':visible')) {
                 cy.get('button h5').contains('Conversation Actions').click();
             }
         });
@@ -105,6 +108,21 @@ class AdminChat {
     }
     checkUserIsInsideUnassigned(expectedUsername){
         cy.contains(expectedUsername).should('be.visible');
+    }
+    getAllConversationCount(){
+        return cy.get(conversationLocators.allCount).invoke('text').then((countText)=>{
+            return parseInt(countText);
+        })
+    }
+    getMineConversationCount(){
+        return cy.get(conversationLocators.mineCount).invoke('text').then((countText)=>{
+            return parseInt(countText);
+        })
+    }
+    getUnassignedConversationCount(){
+        return cy.get(conversationLocators.unassignedCount).invoke('text').then((countText)=>{
+            return parseInt(countText);
+        })
     }
 }
 export default AdminChat;

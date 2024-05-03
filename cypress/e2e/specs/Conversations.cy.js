@@ -82,12 +82,89 @@ describe('Specs for Chatwoot dashboard', () => {
             adminChat.makeSureMoreDetailsIsClicked();
             adminChat.makeSureConversationActionIsClicked();       
             adminChat.selectAssignedSelf(); 
-
             adminChat.clickConversationIcon();
             adminChat.clickMineChatTab();
             adminChat.checkUserIsInsideUnassigned(currentUsername);
         });
-    })
+    });
+    it('test count on different tabs assigned', ()=>{
+        cy.visit('/');
+        adminChat.clickConversationIcon();
+        adminChat.clickAllChatTab();
+        adminChat.checkAllConversationFetched();
+        adminChat.getAllConversationCount().then((allCount) => {
+            adminChat.getMineConversationCount().then((mineCount) => {
+                adminChat.getUnassignedConversationCount().then((unassignedCount) => {
+                    expect(allCount).to.eq(mineCount + unassignedCount);
+                });
+            });
+        });
+    });
+    it('test conversation assigned agent from mine to unassigned and verify counts of conversation in each tabs after that', ()=>{
+        cy.visit('/');
+        adminChat.clickConversationIcon();
+        adminChat.clickAllChatTab();
+        adminChat.checkAllConversationFetched();
+        adminChat.getAllConversationCount().then((initialAllCount) => {
+            adminChat.getMineConversationCount().then((initialMineCount) => {
+                adminChat.getUnassignedConversationCount().then((initialUnassignedCount) => {
+                    expect(initialAllCount).to.eq(initialMineCount + initialUnassignedCount);
+
+                    adminChat.clickMineChatTab();
+                    adminChat.clickFirstConversationUser();
+                    adminChat.makeSureMoreDetailsIsClicked();
+                    adminChat.makeSureConversationActionIsClicked();       
+                    adminChat.selectAssignAgentSelector();
+                    adminChat.selectAssignedNone(); 
+                    cy.reload();
+                    adminChat.clickConversationIcon();
+                    adminChat.clickAllChatTab();
+                    adminChat.checkAllConversationFetched();
+                    adminChat.getAllConversationCount().then((currentAllCount) => {
+                        adminChat.getMineConversationCount().then((currentMineCount) => {
+                            adminChat.getUnassignedConversationCount().then((currentUnassignedCount) => {
+                                expect(currentAllCount).to.eq(currentMineCount + currentUnassignedCount);
+                                expect(currentMineCount).to.eq(initialMineCount - 1);
+                                expect(currentUnassignedCount).to.eq(initialUnassignedCount + 1);
+                            });
+                        });
+                    });                 
+                });
+            });
+        });
+    });
+    it('test conversation assigned agent from unassigned to mine and verify counts of conversation in each tabs after that', ()=>{
+        cy.visit('/');
+        adminChat.clickConversationIcon();
+        adminChat.clickAllChatTab();
+        adminChat.checkAllConversationFetched();
+        adminChat.getAllConversationCount().then((initialAllCount) => {
+            adminChat.getMineConversationCount().then((initialMineCount) => {
+                adminChat.getUnassignedConversationCount().then((initialUnassignedCount) => {
+                    expect(initialAllCount).to.eq(initialMineCount + initialUnassignedCount);
+
+                    adminChat.clickUnassignedChatTab();
+                    adminChat.clickFirstConversationUser();
+                    adminChat.makeSureMoreDetailsIsClicked();
+                    adminChat.makeSureConversationActionIsClicked();       
+                    adminChat.selectAssignedSelf(); 
+                    cy.reload();
+                    adminChat.clickConversationIcon();
+                    adminChat.clickAllChatTab();
+                    adminChat.checkAllConversationFetched();
+                    adminChat.getAllConversationCount().then((currentAllCount)=>{
+                        adminChat.getMineConversationCount().then((currentMineCount)=>{
+                            adminChat.getUnassignedConversationCount().then((currentUnassignedCount)=>{
+                                expect(currentAllCount).to.eq(currentMineCount + currentUnassignedCount);
+                                expect(currentUnassignedCount).to.eq(initialUnassignedCount - 1);
+                                expect(currentMineCount).to.eq(initialMineCount + 1);
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
 
     //################################### Iframe of user side Chat is not accessible. ####################################
         // it('send message from user side', () => {

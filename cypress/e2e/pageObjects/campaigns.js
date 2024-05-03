@@ -99,5 +99,8 @@ class Campaigns {
     checkDisabledCampaign(){
         cy.get(locators.latestCampaign).contains('Disabled');
     }
+    checkCreateButtonNotClicked(){
+        cy.contains('span', 'Ongoing campaigns').should('be.visible');
+    }
 }
 export default Campaigns;

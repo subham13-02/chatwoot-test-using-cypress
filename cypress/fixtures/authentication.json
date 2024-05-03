@@ -18,5 +18,9 @@
     "invalidEmail": {
       "email": "subham.sahu.27.2@mountblue.tech",
       "password": ""
+    },
+    "incorrectEmailFormat": {
+      "email": "subham.sahu.27.2@mountblue.tech",
+      "password": "Subham@123"
     }
 }
